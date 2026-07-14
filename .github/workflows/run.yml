@@ -1,35 +1,21 @@
-name: GLaDOS Checkin
+name: run
+
 on:
-  schedule:
-    - cron: '10 16 * * *'
   workflow_dispatch:
+  push:
+  schedule:
+    - cron: 10 16 * * *
 
 jobs:
-  checkin:
+  run:
     runs-on: ubuntu-latest
-    env:
-      COOKIE: ${{ secrets.COOKIE }}
-      SCKEY: ${{ secrets.SCKEY }}
     steps:
-      - uses: actions/checkout@v4
-
-      - name: 配置Python环境
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          python-version: "3.11"
-
-      - name: 安装依赖
-        run: pip3 install -r requirements.txt
-
-      - name: 执行签到脚本
-        run: python3 main.py
-
-      # 兜底告警：程序异常崩溃才触发
-      - name: 兜底状态推送
-        if: always()
-        run: |
-          STATUS="${{ job.status }}"
-          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          curl -X POST https://sctapi.ftqq.com/${{ secrets.SCKEY }}.send \
-          -d "title=【兜底告警】GLaDOS签到任务：${STATUS}" \
-          -d "desp=运行日志链接：${RUN_URL}"
+          node-version: 18
+      - run: npm ci
+      - run: npm run main
+        env:
+          GLADOS: ${{ secrets.GLADOS }}
+          NOTIFY: ${{ secrets.NOTIFY }}
