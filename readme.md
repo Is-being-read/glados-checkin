@@ -21,6 +21,11 @@ GitHub Actions 实现 [GLaDOS][glados] 自动签到
 1. 如需修改时间, 可以修改文件 [run.yml](.github/workflows/run.yml#L7) 中的 `cron` 参数, 格式可参考 [crontab]
 
 1. 如需推送通知, 可配置 Secret `NOTIFY`, 已支持:
+    1. [Server酱][serverchan]（推荐）：
+        - 方式 A：直接配置 Secret `SCKEY`（推荐）。只要设置了 `SCKEY`，即使不配置 `NOTIFY` 也会推送
+        - 方式 B：在 `NOTIFY` 中配置 `serverchan:{SCKEY}`（用于和其他渠道一起配多行）
+        - 获取 `SCKEY`：登录 Server酱官网创建/查看 SendKey（常见以 `SCT` 开头）
+        - 推送内容会区分：✅签到成功 / ⚠️今日已签到 / ❌Cookie 失效
     1. [WxPusher][wxpusher]: 格式 `wxpusher:{token}:{uid}`
     1. [PushPlus][pushplus]: 格式 `pushplus:{token}`
     1. [PushDeer][pushdeer]: 格式 `pushdeer:{token}`
@@ -38,3 +43,4 @@ GitHub Actions 实现 [GLaDOS][glados] 自动签到
 [wxpusher]: https://wxpusher.zjiecode.com/
 [pushdeer]: https://github.com/easychen/pushdeer
 [bark]: https://bark.day.app
+[serverchan]: https://sct.ftqq.com/
